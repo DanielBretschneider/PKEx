@@ -107,16 +107,48 @@ public class Aufgabe3 {
     }
 
     public static void spielstand(int[][] f){
-        displayScore(f);
+      String score[][] = new String[f.length][f[0].length];
+
+      for (int i = 0; i < f.length; i++) {
+        for (int j = 0; j < f[0].length; j++) {
+          if (f[i][j] == 0) {
+            score[i][j] = " ";
+          } else if (f[i][j] == 1) {
+            score[i][j] = "x";
+          } else if (f[i][j] == 2) {
+            score[i][j] = "o";
+          }
+        }
+      }
+
+      displayScore(score);
     }
 
-    public static void displayScore(int[][] f) {
+    public static String[][] toStringArray(int[][] f) {
+      String stringArray[][] = new String[f.length][f[0].length];
+
+      for (int i = 0; i < f.length; i++) {
+          for (int j = 0; j < f[0].length; j++) {
+              stringArray[i][j] = ""+f[i][j];
+          }
+      }
+
+      return stringArray;
+    }
+
+    public static void displayScore(String[][] f) {
         for (int i = 0; i < f.length; i++) {
             for (int j = 0; j < f[0].length; j++) {
+                if (j == 0) System.out.print("|");
                 System.out.print(f[i][j] + " ");
             }
-            System.out.println();
+            System.out.print("|\n");
         }
+        System.out.print("+");
+        for (int i = 0; i < f.length; i++) {
+          System.out.print("--");
+        }
+        System.out.print("--+\n");
     }
 
     //**************************************************************************
@@ -124,26 +156,73 @@ public class Aufgabe3 {
 
     //***************************  Aufgabe 4  **********************************
     public static int[][] zug(int[][] f, int spieler, int spalte){
-        // TODO: Implementieren Sie hier die Angabe
-        return null; //diese Anweisung ändern oder löschen.
+        if ((spalte < 0) || (spalte > 8))  {
+          return null;
+        } else {
+            int nextFreeRow = getRow(f,spalte);
+
+            if (spieler == 1) {
+              f[nextFreeRow][spalte] = 1;
+              return f;
+            } else {
+              f[nextFreeRow][spalte] = 2;
+              return f;
+            }
+        }
+        return null;
+    }
+
+    public static int getRow(int[][]f, spalte) {
+        for (int i = f.length; i >= 0; i--) {
+          for (int j = f[0].lengt; j >= 0; j--) {
+              if (f[i][spalte] == 0) {
+                  return i;
+              } else {
+                  continue;
+              }
+          }
+        }
+        return null;
     }
 
     public static boolean sieg(int[][] f, int spieler) {
-        // TODO: Implementieren Sie hier die Angabe
-        return false; //diese Anweisung ändern oder löschen.
+        for (int i = f.length; i >= 0; i--) {
+          for (int j = f[0].lengt; j >= 0; j--) {
+              if (f[i][j] == 1) {
+                checkIfWon(f, i, j, spieler);
+              }
+          }
+        }
+        return false;
     }
+
+    public static boolean checkIfWon(int[][] f, int i, int j, int player) {
+      if (f[i][j] == player) {
+        if (f[i][j+1] == player) {
+          return true;
+        } else if (f[i+1][j] == player){
+          return false;
+        }
+      }
+    }
+
     //**************************************************************************
 
 
     //***************************  Aufgabe 5  **********************************
     public static void spiel(){
-        // TODO: Implementieren Sie hier die Angabe
+      int uInput = "";
+      Scanner sc = new Scanner();
+      uInput = sc.next();
+      while(!sieg(f, 1)) {
+        System.out.println("Geben Sie eine Zahl von 0 bis 7 an: ");
+        uInput = sc.next();
+      }
     }
     //**************************************************************************
 
     public static void main(String[] args) {
         int field[][] = spielfeld();
-        spielstand(field);
 
     }
 }
