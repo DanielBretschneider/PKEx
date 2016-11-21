@@ -92,13 +92,10 @@ public class Aufgabe3 {
 
     //***************************  Aufgabe 3  **********************************
     public static int[][] spielfeld(){
-        int rows = 6;
-        int cols = 7;
+        int field[][] = new int[6][7];
 
-        int field[][] = new int[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field[0].length; j++) {
                 field[i][j] = 0;
             }
         }
@@ -107,103 +104,87 @@ public class Aufgabe3 {
     }
 
     public static void spielstand(int[][] f){
-      String score[][] = new String[f.length][f[0].length];
-
-      for (int i = 0; i < f.length; i++) {
-        for (int j = 0; j < f[0].length; j++) {
-          if (f[i][j] == 0) {
-            score[i][j] = " ";
-          } else if (f[i][j] == 1) {
-            score[i][j] = "x";
-          } else if (f[i][j] == 2) {
-            score[i][j] = "o";
-          }
-        }
-      }
-
-      displayScore(score);
-    }
-
-    public static String[][] toStringArray(int[][] f) {
-      String stringArray[][] = new String[f.length][f[0].length];
-
-      for (int i = 0; i < f.length; i++) {
-          for (int j = 0; j < f[0].length; j++) {
-              stringArray[i][j] = ""+f[i][j];
-          }
-      }
-
-      return stringArray;
-    }
-
-    public static void displayScore(String[][] f) {
         for (int i = 0; i < f.length; i++) {
             for (int j = 0; j < f[0].length; j++) {
                 if (j == 0) System.out.print("|");
-                System.out.print(f[i][j] + " ");
+                switch (f[i][j]) {
+                    case 0:
+                        System.out.print(" ");
+                        break;
+                    case 1:
+                        System.out.print("x");
+                        break;
+                    case 2:
+                        System.out.print("o");
+                        break;
+                }
+                if (j == f[0].length-1) System.out.print("|");
             }
-            System.out.print("|\n");
+            System.out.println();
         }
-        System.out.print("+");
-        for (int i = 0; i < f.length; i++) {
-          System.out.print("--");
-        }
-        System.out.print("--+\n");
+        System.out.println("+-------+");
     }
 
     //**************************************************************************
 
 
     //***************************  Aufgabe 4  **********************************
-    public static int[][] zug(int[][] f, int spieler, int spalte){
-        if ((spalte < 0) || (spalte > 8))  {
-          return null;
-        } else {
-            int nextFreeRow = getRow(f,spalte);
-
-            if (spieler == 1) {
-              f[nextFreeRow][spalte] = 1;
-              return f;
-            } else {
-              f[nextFreeRow][spalte] = 2;
-              return f;
+    public static int[][] zug(int[][] f, int spieler, int spalte) {
+        for (int i = f.length-1; i > 0; i--) {
+            for (int j = f[0].length-1; j > 0; j--) {
+                if (f[i][spalte] == 0) {
+                    f[i][spalte] = spieler;
+                    return f;
+                } else {
+                    continue;
+                }
             }
         }
         return null;
     }
 
-    public static int getRow(int[][]f, spalte) {
-        for (int i = f.length; i >= 0; i--) {
-          for (int j = f[0].lengt; j >= 0; j--) {
-              if (f[i][spalte] == 0) {
-                  return i;
-              } else {
-                  continue;
-              }
-          }
-        }
-        return null;
+    public static boolean sieg(int[][] f, int spieler) {
+        return (checkHorizontal(f, spieler) ? true : checkVertical(f, spieler) ? true : false);
     }
 
-    public static boolean sieg(int[][] f, int spieler) {
-        for (int i = f.length; i >= 0; i--) {
-          for (int j = f[0].lengt; j >= 0; j--) {
-              if (f[i][j] == 1) {
-                checkIfWon(f, i, j, spieler);
-              }
-          }
+    public static boolean checkHorizontal(int[][] f, int spieler) {
+        for (int i = f.length-1; i > 0; i--) {
+            for (int j = f[0].length-1; j > 0; j--) {
+                if (f[i][j] == spieler) {
+                    for (int k = j; j < f[0].length-j; k++) {
+                        int sum = 1;
+                        if (f[i][k] == spieler && f[i][k-1] == spieler) {
+                            if (sum == 4) return true;
+                            sum++;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            }
         }
         return false;
     }
 
-    public static boolean checkIfWon(int[][] f, int i, int j, int player) {
-      if (f[i][j] == player) {
-        if (f[i][j+1] == player) {
-          return true;
-        } else if (f[i+1][j] == player){
-          return false;
+    public static boolean checkVertical(int[][] f, int spieler) {
+        int sum = 1;
+
+        for (int i = f.length-1; i > 0; i--) {
+            for (int j = f[0].length-1; j > 0; j--) {
+                if (f[i][j] == spieler) {
+                    for (int k = j; j < f.length-j; k++) {
+                        if (f[k][j] == spieler && f[k-1][j] == spieler) {
+                            System.out.println(sum);
+                            if (sum == 4) return true;
+                            sum++;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            }
         }
-      }
+        return false;
     }
 
     //**************************************************************************
@@ -211,18 +192,35 @@ public class Aufgabe3 {
 
     //***************************  Aufgabe 5  **********************************
     public static void spiel(){
-      int uInput = "";
-      Scanner sc = new Scanner();
-      uInput = sc.next();
-      while(!sieg(f, 1)) {
-        System.out.println("Geben Sie eine Zahl von 0 bis 7 an: ");
-        uInput = sc.next();
-      }
+        /* initialisze playing field */
+        int[][] field = spielfeld();
+        int input = 0;
+
+
+        while (sieg(field, 1) == false && sieg(field, 2) == false) {
+            input = getUserInput(1);
+            field = zug(field, 1, input);
+            spielstand(field);
+            if (sieg(field,1) == true || sieg(field, 2) == true) return;
+            input = getUserInput(2);
+            field = zug(field, 2, input);
+            spielstand(field);
+        }
+
     }
+
+    public static int getUserInput(int spieler) {
+        Scanner scanner = new Scanner(System.in);
+        int uInput = 0;
+        System.out.printf("[P%d] Enter column number [0-6]: ", spieler);
+        uInput = scanner.nextInt();
+        System.out.println();
+        return uInput;
+    }
+
     //**************************************************************************
 
     public static void main(String[] args) {
-        int field[][] = spielfeld();
-
+        spiel();
     }
 }

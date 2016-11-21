@@ -45,7 +45,7 @@
     3. Warum ist double kein geeigneter Ergebnistyp für diese Aufgabe?
 */
 public class Aufgabe1 {
-    
+
     public static int rec(int n) {
         if (n <= 1) {
             return 1;
@@ -81,5 +81,3 @@ public class Aufgabe1 {
         }
     }
 }
-
-
