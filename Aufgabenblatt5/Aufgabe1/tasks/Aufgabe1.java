@@ -86,64 +86,72 @@ class Period {
     private String from = "";
     private String to = "";
 
-    public Period(String from, String to) {
+    /**
+     * Konstruktor
+     *
+     * @param from
+     * @param to
+     */
+    public Period(String from, String to){
         this.from = from;
         this.to = to;
     }
 
-    public String from() {
+    /**
+     * from: gibt die Beginn-Zeit zurück.
+     *
+     * @return
+     */
+    public String from(){
         return from;
     }
 
-    public String to() {
+    /**
+     * to: gibt die Ende-Zeit zurück.
+     *
+     * @return
+     */
+    public String to(){
         return to;
     }
 }
 
 public class Aufgabe1 {
-    private TreeMap timetable = new TreeMap();
+    private Map<String, Period> tagesablaufplan = new TreeMap<>();
 
-    public Aufgabe1() {
-        setup();
+    /**
+     * @param tat String, der einer Tätigkeit entspricht
+     * @return die Beginn-Zeit der Tätigkeit als String (enthält eine neue Zeit)
+     */
+    public String from(String activity){
+        return this.tagesablaufplan.get(activity).from();
     }
 
-    public String from(String activity) {
-        if (timetable.containsKey(activity)) {
-            getPeriod(activity);
-        } else {
-            return null;
-        }
+    /**
+     * @param tat String, der einer Tätigkeit entspricht
+     * @return gibt die Ende-Zeit der Tätigkeit als String zurück; das Ergebnis ist null falls die Tätigkeit nicht vorgesehen ist
+     */
+    public String to(String activity){
+        return this.tagesablaufplan.get(activity).to();
     }
 
-    public String to(String activity) {
-        if (timetable.containsKey(activity)) {
-            getPeriod(activity);
-        } else {
-            return null;
-        }
-    }
-
-    public boolean add(String activity, Period period) {
-        if (timetable.containsKey(activity) || timetable.containsValue(period.from())) {
+    /**
+     * Wird für den schrittweisen Aufbau des Tagesablaufplans benötigt
+     * @param tat String, der eine Tätigkeit angibt
+     * @param period Period, die den Zeitraum der Tätigkeit angibt
+     * @return kommt false zurück wenn für diese Tätigkeit vor Aufruf von add noch kein Zeitraum vorgesehen war, true
+     * wenn schon ein Zeitraum vorgesehen war, der durch den Aufruf von add ersetzt wird
+     */
+    public boolean add(String activity, Period period){
+        if(this.tagesablaufplan.containsKey(activity)){
+            this.tagesablaufplan.put(activity, period);
             return true;
-        } else {
-            return false;
         }
+        this.tagesablaufplan.put(activity, period);
+        return false;
     }
 
-    private String getPeriod(String activity) {
-        return (String)timetable.get(activity);
+    public static void main(String[] args) {
+
     }
-
-    public void setup() {
-        timetable.put("Sonnenaufgang betrachten","1.95.0-2.5.0");
-        timetable.put("Frühstücken","2.15.0-2.30.0");
-        timetable.put("Muschelsammeln","3.0.0-3.50.0");
-        timetable.put("Sonnenhut tragen","2.0.0-6.0.0");
-
-        System.out.println(timetable.get("Muschelsammeln"));
-    }
-
 }
-
-

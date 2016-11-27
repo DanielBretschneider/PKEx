@@ -237,12 +237,11 @@ public class Aufgabe3 {
     
     
     //***************************  Aufgabe 4  **********************************
-    public static int negamax(int[][] f, int spieler, int tiefe){
-        // TODO: Implementieren Sie hier die Angabe
-        return -1; //diese Anweisung ändern oder löschen.
+    public static int negamax(int[][] f, int spieler, int tiefe) {
     }
-    
-    
+
+
+
     public static int bester(int[][] f, int spieler, int tiefe){
         // TODO: Implementieren Sie hier die Angabe
         return -1; //diese Anweisung ändern oder löschen.

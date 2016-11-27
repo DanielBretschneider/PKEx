@@ -33,7 +33,12 @@ import java.util.Stack;
        lösen? Welche Nachteile würden sich daraus ergeben?
 */
 public class Aufgabe2 {
-    
+
+    /**
+     *
+     * @param expression
+     * @return
+     */
     public static boolean check(String expression) {
         Stack<Character> stack = new Stack<Character>();
         char currCharacter;
@@ -79,6 +84,10 @@ public class Aufgabe2 {
         return false;
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         System.out.println(check("a*[a+12]"));
         System.out.println(check("(a)*[a+12]"));
