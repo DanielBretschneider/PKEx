@@ -110,6 +110,118 @@
 */
 import java.util.Scanner;
 public class Aufgabe3 {
+    //***************************  4-gewinnt AB 4 ******************************
+    public static int[][] spielfeld(){
+        return new int[6][7];
+    }
+
+    public static void spielstand(int[][] f){
+        for(int y = f.length-1; y >= 0; y--){
+            System.out.print("|");
+            for(int x : f[y]){
+                switch(x){
+                    case 0:
+                        System.out.print(" ");
+                        break;
+                    case 1:
+                        System.out.print("x");
+                        break;
+                    case 2:
+                        System.out.print("o");
+                        break;
+                }
+            }
+            System.out.println("|");
+        }
+        System.out.println("+-------+");
+    }
+
+    public static int[][] zug(int[][] f, int spieler, int spalte){
+        if (spalte < 0 || spalte > 6){
+            return null;
+        }
+        if (f[5][spalte] != 0){
+            return null;
+        }
+        int r = 0;
+        while(f[r][spalte] != 0){
+            r++;
+        }
+        f[r][spalte] = spieler;
+        return f;
+    }
+
+    public static boolean sieg(int[][] f, int spieler) {
+        // first, check 4-in-a-row:
+        for (int r = 0; r <= 5; r++) {
+            int cont = 0;
+            for (int c = 0; c <= 6; c++) {
+                if (f[r][c] == spieler){
+                    cont++;
+                }
+                else {
+                    cont = 0;
+                }
+                if (cont == 4) {
+                    return true;
+                }
+            }
+        }
+
+        // now, check 4-in-a-column:
+        for (int c = 0; c <= 6; c++) {
+            int cont = 0;
+            for (int r = 0; r <= 5; r++) {
+                if (f[r][c] == spieler){
+                    cont++;
+                }
+                else{
+                    cont = 0;
+                }
+                if (cont == 4) {
+                    return true;
+                }
+            }
+        }
+
+        // then, check 4-in-a-positive-diagonal:
+        for (int d = -2; d <= 3; d++) {
+            int cont = 0;
+            for (int r = 0; r <= 5; r++) {
+                int c = r + d;
+                if (c >= 0 && c <= 6) {
+                    if (f[r][c] == spieler) {
+                        cont++;
+                    } else {
+                        cont = 0;
+                    }
+                    if (cont == 4) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // finally, check 4-in-a-negative-diagonal:
+        for (int d = 3; d <= 8; d++) {
+            int cont = 0;
+            for (int r = 5; r >= 0; r--) {
+                int c = d - r;
+                if (c >= 0 && c <= 6) {
+                    if (f[r][c] == spieler) {
+                        cont++;
+                    } else {
+                        cont = 0;
+                    }
+                    if (cont == 4) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
     //***************************  Aufgabe 3  **********************************
     public static int wert1(int[][] f, int spieler){

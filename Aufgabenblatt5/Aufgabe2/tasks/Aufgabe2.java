@@ -1,5 +1,4 @@
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.Stack;
 
 /*
     Aufgabe 2) Deque - Klammerung
@@ -33,52 +32,58 @@ import java.util.LinkedList;
     2. Wie könnte man diese Aufgabe auch mit einem Array statt einem Stack
        lösen? Welche Nachteile würden sich daraus ergeben?
 */
-public class Aufgabe2{
+public class Aufgabe2 {
     
     public static boolean check(String expression) {
-        Deque<String> stack = new LinkedList<>();
+        Stack<Character> stack = new Stack<Character>();
+        char currCharacter;
 
-        if (expression.equals("")) {
-            return true;
-        } else if (!foundsomething(expression)) {
-            return false;
-        }
+        for (int i = 0; i < expression.length(); i++) {
+            currCharacter = expression.charAt(i);
 
-        for (char c : expression.toCharArray()) {
-            if (c == '(' || c == '[' || c == '{') {
-                stack.addFirst(""+c);
-            } else if ((stack.size() > 0) && (c == ')' || c == ']' || c == '}')) {
-                stack.removeFirst();
-            } else {
-                continue;
+            if (currCharacter == '[' || currCharacter == '{' ||currCharacter == '(') {
+                stack.push(currCharacter);
+            } else if (currCharacter == ']' || currCharacter == '}' ||currCharacter == ')') {
+                if (stack.isEmpty()) {
+                    return false;
+                } else {
+                    switch (currCharacter) {
+                        case ']':
+                            if (stack.pop() != '[') {
+                                return false;
+                            }
+                            break;
+
+                        case '}':
+                            if (stack.pop() != '{') {
+                                return false;
+                            }
+                            break;
+
+                        case ')':
+                            if (stack.pop() != '(') {
+                                return false;
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
             }
         }
-
-        if (stack.size() == 0) {
+        if (stack.isEmpty()) {
             return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static boolean foundsomething(String expression) {
-        String[] left_parenthesis = {"(", "[", "{"};
-        boolean containsOpener = false;
-
-        for (String s : left_parenthesis) {
-            if (expression.contains(s)) {
-                containsOpener = true;
-                continue;
-            }
         }
 
-        return containsOpener;
+        return false;
     }
 
     public static void main(String[] args) {
         System.out.println(check("a*[a+12]"));
         System.out.println(check("(a)*[a+12]"));
         System.out.println(check("(}"));
+        System.out.println(check(""));
     }
 }
 

@@ -103,12 +103,24 @@ class Period {
 public class Aufgabe1 {
     private TreeMap timetable = new TreeMap();
 
+    public Aufgabe1() {
+        setup();
+    }
+
     public String from(String activity) {
-        return getPeriod(activity);
+        if (timetable.containsKey(activity)) {
+            getPeriod(activity);
+        } else {
+            return null;
+        }
     }
 
     public String to(String activity) {
-        return getPeriod(activity);
+        if (timetable.containsKey(activity)) {
+            getPeriod(activity);
+        } else {
+            return null;
+        }
     }
 
     public boolean add(String activity, Period period) {
@@ -131,10 +143,7 @@ public class Aufgabe1 {
 
         System.out.println(timetable.get("Muschelsammeln"));
     }
-    
-    public static void main(String[] args) {
-        new Aufgabe1().setup();
-    }
+
 }
 
 
